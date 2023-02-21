@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using mission6.Models;
 using System;
@@ -28,30 +29,85 @@ namespace mission6.Controllers
         [HttpGet]
         public IActionResult addMovies()
         {
-            return View();
+            ViewBag.Categories = _blahContext.Categories.ToList();
+            return View(new movieInput());
         }
 
         [HttpPost]
         public IActionResult addMovies(movieInput ar)
         {
-            _blahContext.Add(ar);
-            _blahContext.SaveChanges();
-            return View("submitted", ar);
+            if (ModelState.IsValid)
+            {
+                _blahContext.Add(ar);
+                _blahContext.SaveChanges();
+                return View("submitted", ar);
+            }
+            else
+            {
+                ViewBag.Categories = _blahContext.Categories.ToList();
+                return View(ar);
+            }
+
+            
         }
         public IActionResult myPodcasts()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult MovieList()
         {
-            return View();
+            var movieToAdd = _blahContext.moviesAdded
+                .Include(x => x.Category)
+                .ToList();
+
+            return View(movieToAdd);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult Edit(int movieId)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.Categories = _blahContext.Categories.ToList();
+            var movieEdited = _blahContext.moviesAdded.Single(x => x.MovieId == movieId);
+
+            return View("addMovies", movieEdited);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(movieInput blah)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _blahContext.Update(blah);
+            _blahContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
+            }
+
+            else
+            {
+                ViewBag.Categories = _blahContext.Categories.ToList();
+                return View("addMovies", blah);
+            }
+
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int movieId)
+        {
+            var movie = _blahContext.moviesAdded.Single(x => x.MovieId == movieId);
+
+            return View(movie);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(movieInput mo)
+        {
+            _blahContext.moviesAdded.Remove(mo);
+            _blahContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
         }
     }
 }

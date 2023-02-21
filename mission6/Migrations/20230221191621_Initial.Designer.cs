@@ -8,7 +8,7 @@ using mission6.Models;
 namespace mission6.Migrations
 {
     [DbContext(typeof(movieContext))]
-    [Migration("20230213234712_Initial")]
+    [Migration("20230221191621_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,15 +17,60 @@ namespace mission6.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.32");
 
+            modelBuilder.Entity("mission6.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Action/Adventure"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Romance"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Horror"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            CategoryName = "Thriller"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            CategoryName = "Documentary"
+                        });
+                });
+
             modelBuilder.Entity("mission6.Models.movieInput", b =>
                 {
                     b.Property<int>("MovieId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -54,13 +99,15 @@ namespace mission6.Migrations
 
                     b.HasKey("MovieId");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("moviesAdded");
 
                     b.HasData(
                         new
                         {
                             MovieId = 1,
-                            Category = "Action/Adventure",
+                            CategoryId = 1,
                             Director = "George Lucas",
                             Edited = false,
                             Rating = "PG-13",
@@ -70,7 +117,7 @@ namespace mission6.Migrations
                         new
                         {
                             MovieId = 2,
-                            Category = "Action/Adventure",
+                            CategoryId = 1,
                             Director = "George Lucas",
                             Edited = false,
                             Rating = "PG",
@@ -80,13 +127,22 @@ namespace mission6.Migrations
                         new
                         {
                             MovieId = 3,
-                            Category = "Action/Adventure",
+                            CategoryId = 1,
                             Director = "George Lucas",
                             Edited = false,
                             Rating = "PG",
                             Title = "Star Wars I",
                             Year = 1998
                         });
+                });
+
+            modelBuilder.Entity("mission6.Models.movieInput", b =>
+                {
+                    b.HasOne("mission6.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

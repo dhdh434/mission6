@@ -14,12 +14,14 @@ namespace mission6.Models
 
         }
 
+        //add the databases
         public DbSet<movieInput> moviesAdded { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+        //seed the data
         protected override void OnModelCreating(ModelBuilder mb)
         {
-            
+            //seed the category data
             mb.Entity<Category>().HasData(
                 new Category { CategoryId = 1, CategoryName = "Action/Adventure" },
                 new Category { CategoryId = 2, CategoryName = "Romance" },
@@ -29,7 +31,7 @@ namespace mission6.Models
                 new Category { CategoryId = 6, CategoryName = "Documentary" }
             );
 
-
+            //seed the first three movies
             mb.Entity<movieInput>().HasData(
                 new movieInput
                 {

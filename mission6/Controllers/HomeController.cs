@@ -21,11 +21,13 @@ namespace mission6.Controllers
             _blahContext = someName;
         }
 
+        // home page controller
         public IActionResult Index()
         {
             return View();
         }
 
+        // get for adding movies page controller
         [HttpGet]
         public IActionResult addMovies()
         {
@@ -33,11 +35,14 @@ namespace mission6.Controllers
             return View(new movieInput());
         }
 
+        // post for adding movies page controller
         [HttpPost]
         public IActionResult addMovies(movieInput ar)
         {
+            //check to make sure input is correct
             if (ModelState.IsValid)
             {
+                // add the new changes
                 _blahContext.Add(ar);
                 _blahContext.SaveChanges();
                 return View("submitted", ar);
@@ -50,13 +55,17 @@ namespace mission6.Controllers
 
             
         }
+        
+        //podcast controllers
         public IActionResult myPodcasts()
         {
             return View();
         }
 
+        //movie list controller
         public IActionResult MovieList()
         {
+            // bring in the list of movies
             var movieToAdd = _blahContext.moviesAdded
                 .Include(x => x.Category)
                 .ToList();
@@ -64,6 +73,7 @@ namespace mission6.Controllers
             return View(movieToAdd);
         }
 
+        // get for editting
         [HttpGet]
         public IActionResult Edit(int movieId)
         {
@@ -73,14 +83,16 @@ namespace mission6.Controllers
             return View("addMovies", movieEdited);
         }
 
+        // post for editting
         [HttpPost]
         public IActionResult Edit(movieInput blah)
         {
-
+            //check the input and make sure its correct
             if (ModelState.IsValid)
             {
+                //update the changes
                 _blahContext.Update(blah);
-            _blahContext.SaveChanges();
+                _blahContext.SaveChanges();
 
             return RedirectToAction("MovieList");
             }
@@ -93,6 +105,7 @@ namespace mission6.Controllers
 
         }
 
+        //delete the movie
         [HttpGet]
         public IActionResult Delete(int movieId)
         {
@@ -104,6 +117,7 @@ namespace mission6.Controllers
         [HttpPost]
         public IActionResult Delete(movieInput mo)
         {
+            //remove the item
             _blahContext.moviesAdded.Remove(mo);
             _blahContext.SaveChanges();
 

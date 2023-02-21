@@ -8,6 +8,7 @@ namespace mission6.Models
 {
     public class Category
     {
+        //category table
         [Key]
         [Required]
         public int CategoryId { get; set; }

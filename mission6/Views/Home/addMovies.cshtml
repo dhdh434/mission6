@@ -7,14 +7,17 @@
 <h2>Add Movie NOW!!!</h2>
 
 <div>
+    @*create a form and recieve the inputs*@
     <form method="post">
 
+        @*display any errors*@
         <div asp-validation-summary="All"></div>
         <input asp-for="MovieId" type="hidden" />
 
         <label asp-for="Title">Title:</label>
         <input asp-for="Title" /><br />
 
+        @*select from the categories*@
         <label asp-for="CategoryId">Category:</label>
         <select asp-for="CategoryId">
             <option value="">Select a Category</option>

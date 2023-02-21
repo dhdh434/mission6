@@ -10,6 +10,7 @@
 
     <thead class="font-weight-bold">
         <tr>
+            @*head of the table*@
             <td>Title</td>
             <td>Category</td>
             <td>Year</td>
@@ -22,6 +23,7 @@
     </thead>
 
     <tbody>
+        @*loop through each item*@
         @foreach (var x in Model)
         {
             <tr>
@@ -34,6 +36,7 @@
                 <td>@x.LentTo</td>
                 <td>@x.Notes</td>
 
+                @*include links to edit and delete*@
                 <td><a asp-controller="Home" asp-action="Edit" asp-route-movieid="@x.MovieId">Edit</a></td>
                 <td><a asp-controller="Home" asp-action="Delete" asp-route-movieid="@x.MovieId">Delete</a></td>
 
